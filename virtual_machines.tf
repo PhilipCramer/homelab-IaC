@@ -100,7 +100,7 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
 }
 
 resource "proxmox_virtual_environment_vm" "talos_worker_02" {
-  depends_on = [ proxmox_virtual_environment_vm.talos_cp_02 ]
+  depends_on = [ proxmox_virtual_environment_vm.talos_cp_01 ]
   name        = "talos-worker-02"
   description = "Managed by Terraform"
   tags        = ["terraform"]
