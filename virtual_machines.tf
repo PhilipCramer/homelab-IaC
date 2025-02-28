@@ -9,19 +9,15 @@ resource "proxmox_virtual_environment_vm" "talos_cp_01" {
     cores = 4
     type = "x86-64-v2-AES"
   }
-
   memory {
     dedicated = 4096
   }
-
   agent {
     enabled = true
   }
-
   network_device {
     bridge = "vmbr0"
   }
-
   disk {
     datastore_id = "local-lvm"
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
@@ -29,11 +25,9 @@ resource "proxmox_virtual_environment_vm" "talos_cp_01" {
     interface    = "virtio0"
     size         = 20
   }
-
   operating_system {
     type = "l26" # Linux Kernel 2.6 - 5.X.
   }
-
   initialization {
     datastore_id = "local-lvm"
     ip_config {
@@ -60,19 +54,15 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
     cores = 2
     type = "x86-64-v2-AES"
   }
-
   memory {
     dedicated = 2048
   }
-
   agent {
     enabled = true
   }
-
   network_device {
     bridge = "vmbr0"
   }
-
   disk {
     datastore_id = "local-lvm"
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
@@ -80,11 +70,9 @@ resource "proxmox_virtual_environment_vm" "talos_worker_01" {
     interface    = "virtio0"
     size         = 20
   }
-
   operating_system {
     type = "l26" # Linux Kernel 2.6 - 5.X.
   }
-
   initialization {
     datastore_id = "local-lvm"
     ip_config {
@@ -111,19 +99,15 @@ resource "proxmox_virtual_environment_vm" "talos_worker_02" {
     cores = 2
     type = "x86-64-v2-AES"
   }
-
   memory {
     dedicated = 2048
   }
-
   agent {
     enabled = true
   }
-
   network_device {
     bridge = "vmbr0"
   }
-
   disk {
     datastore_id = "local-lvm"
     file_id      = proxmox_virtual_environment_download_file.talos_nocloud_image.id
@@ -131,16 +115,14 @@ resource "proxmox_virtual_environment_vm" "talos_worker_02" {
     interface    = "virtio0"
     size         = 20
   }
-
   operating_system {
     type = "l26" # Linux Kernel 2.6 - 5.X.
   }
-
   initialization {
     datastore_id = "local-lvm"
     ip_config {
       ipv4 {
-        address = "${var.talos_worker_01_ip_addr}/25"
+        address = "${var.talos_worker_02_ip_addr}/25"
         gateway = var.default_gateway
       }
       ipv6 {
