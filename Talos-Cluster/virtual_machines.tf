@@ -2,8 +2,12 @@
 resource "proxmox_virtual_environment_vm" "control_plane" {
   for_each = var.node_data.controlplanes
   name        = each.value.hostname
-  node_name = "pve03" # Node in Proxmox where VMs will be created
+  node_name = each.value.node # Node in Proxmox where VMs will be created
+  tags  = ["terraform"]
 
+  agent {
+    enabled = true
+  }
   memory {
     dedicated = 4096
   }
@@ -17,7 +21,7 @@ resource "proxmox_virtual_environment_vm" "control_plane" {
   }
   disk {
     datastore_id = "local-lvm"
-    file_id      = var.talos_image_id
+    file_id      =  proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
     size         = 20
@@ -38,13 +42,17 @@ resource "proxmox_virtual_environment_vm" "control_plane" {
 resource "proxmox_virtual_environment_vm" "workers" {
   for_each = var.node_data.workers
   name        = each.value.hostname
-  node_name = "pve03" # Node in Proxmox where VMs will be created
+  node_name = each.value.node # Node in Proxmox where VMs will be created
+  tags  = ["terraform"]
 
+  agent {
+    enabled = true
+  }
   memory {
-    dedicated = 2048
+    dedicated = 4096
   }
   cpu {
-    cores   = 2
+    cores   = 4
     type  = "x86-64-v2-AES"
   }
   network_device {
@@ -53,7 +61,7 @@ resource "proxmox_virtual_environment_vm" "workers" {
   }
   disk {
     datastore_id = "local-lvm"
-    file_id      = var.talos_image_id
+    file_id      =  proxmox_virtual_environment_download_file.talos_nocloud_image.id
     file_format  = "raw"
     interface    = "virtio0"
     size         = 20

@@ -7,3 +7,6 @@ output "kubeconfig" {
   value     = talos_cluster_kubeconfig.this.kubeconfig_raw
   sensitive = true
 }
+output "cluster_endpoint" {
+  value = var.cluster_endpoint
+}

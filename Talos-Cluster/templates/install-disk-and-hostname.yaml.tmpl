@@ -3,3 +3,23 @@ machine:
     disk: ${install_disk}
   network:
     hostname: ${hostname}
+    interfaces:
+      - deviceSelector:
+          physical: true
+        addresses:
+          - ${ip_address}
+        routes:
+          - network: 0.0.0.0/0 # The route's network.
+            gateway: ${gateway} # The route's gateway.
+        dhcp: false
+    nameservers:
+      - 172.17.2.1
+  kubelet:
+    extraMounts:
+      - destination: /var/lib/longhorn
+        type: bind
+        source: /var/lib/longhorn
+        options:
+          - bind
+          - rshared
+          - rw
