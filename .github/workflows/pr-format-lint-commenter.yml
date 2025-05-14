@@ -66,14 +66,3 @@ jobs:
           commenter_type: tflint
           commenter_input: ${{ format('{0}{1}', steps.tflint.outputs.stdout, steps.tflint.outputs.stderr) }}
           commenter_exitcode: ${{ steps.tflint.outputs.exitcode }}
-      - name: Tofu Plan
-        id: plan
-        run: tofu plan -lock=false -input=false |& tee tf_plan.txt
-      - uses: phoenix-actions/opentofu-pr-commenter@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TF_WORKSPACE: ${{ inputs.tofu_workspace }}
-        with:
-          commenter_type: plan
-          commenter_plan_path: tf_plan.txt
-          commenter_exitcode: ${{ steps.plan.outputs.exit }}
