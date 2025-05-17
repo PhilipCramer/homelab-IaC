@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup OpenTofu
-        uses: opentofu/setup-opentofu@v2
+        uses: opentofu/setup-opentofu@v1.0.3
         with:
           tofu_version: ${{ env.TF_VERSION }}
       - name: Tofu Format
