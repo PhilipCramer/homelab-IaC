@@ -15,21 +15,21 @@ variable "node_data" {
       install_disk = string
       hostname     = optional(string)
       ip           = string
-      node = string
+      node         = string
     }))
     workers = map(object({
       install_disk = string
       hostname     = optional(string)
       ip           = string
-      node = string
+      node         = string
     }))
   })
   default = {
     controlplanes = {
       "talos-control-01" = {
         install_disk = "/dev/sda"
-        hostname = "talos-control-01"
-        ip = "172.17.2.111/25"
+        hostname     = "talos-control-01"
+        ip           = "172.17.2.111/25"
         node         = "pve03"
       },
     }
@@ -37,18 +37,17 @@ variable "node_data" {
       "talos-worker-01" = {
         install_disk = "/dev/sda"
         hostname     = "talos-worker-01"
-        ip = "172.17.2.121/25"
+        ip           = "172.17.2.121/25"
         node         = "pve03"
       },
     }
   }
 }
-
+variable "ts_key" {
+  type      = string
+  sensitive = true
+}
 variable "default_gateway" {
   type    = string
   default = "172.17.2.1"
-}
-variable "tailscale_token" {
-  type    = string
-  sensitive = true
 }

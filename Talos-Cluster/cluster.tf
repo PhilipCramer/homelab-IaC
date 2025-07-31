@@ -21,6 +21,8 @@ data "talos_client_configuration" "this" {
 }
 
 resource "talos_machine_configuration_apply" "controlplane" {
+  depends_on = [proxmox_virtual_environment_vm.control_plane]
+
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.controlplane.machine_configuration
   for_each                    = var.node_data.controlplanes
@@ -29,15 +31,19 @@ resource "talos_machine_configuration_apply" "controlplane" {
     templatefile("${path.module}/templates/install-disk-and-hostname.yaml.tmpl", {
       hostname     = each.value.hostname == null ? format("%s-cp-%s", var.cluster_name, index(keys(var.node_data.controlplanes), each.key)) : each.value.hostname
       install_disk = each.value.install_disk
-      ip_address = each.value.ip
-      gateway = var.default_gateway
-      tailscale = var.tailscale_token
+      ip_address   = each.value.ip
+      gateway      = var.default_gateway
     }),
     file("${path.module}/files/cp-scheduling.yaml"),
+    templatefile("${path.module}/files/tailscale.yaml", {
+      ts_key = var.ts_key
+    })
   ]
 }
 
 resource "talos_machine_configuration_apply" "worker" {
+  depends_on = [proxmox_virtual_environment_vm.workers]
+
   client_configuration        = talos_machine_secrets.this.client_configuration
   machine_configuration_input = data.talos_machine_configuration.worker.machine_configuration
   for_each                    = var.node_data.workers
@@ -46,9 +52,11 @@ resource "talos_machine_configuration_apply" "worker" {
     templatefile("${path.module}/templates/install-disk-and-hostname.yaml.tmpl", {
       hostname     = each.value.hostname == null ? format("%s-worker-%s", var.cluster_name, index(keys(var.node_data.workers), each.key)) : each.value.hostname
       install_disk = each.value.install_disk
-      ip_address = each.value.ip
-      gateway = var.default_gateway
-      tailscale = var.tailscale_token
+      ip_address   = each.value.ip
+      gateway      = var.default_gateway
+    }),
+    templatefile("${path.module}/files/tailscale.yaml", {
+      ts_key = var.ts_key
     })
   ]
 }

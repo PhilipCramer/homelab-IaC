@@ -2,3 +2,7 @@
 planfile
 *.tfvars
 *.tfstate*
+**/kubeconfig
+
+# direnv cache
+.direnv
